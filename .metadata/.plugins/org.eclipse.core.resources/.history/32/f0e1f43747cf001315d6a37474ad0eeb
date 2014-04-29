@@ -1,0 +1,19 @@
+import javax.swing.*;
+
+
+public class SessionReportFrame extends JPanel{
+
+	private String tutor;
+	private String tutee;
+	private JPanel ReportScreen;
+	
+	public SessionReportFrame() {
+		ReportScreen = new JPanel();
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

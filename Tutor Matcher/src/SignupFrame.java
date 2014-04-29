@@ -49,8 +49,11 @@ public class SignupFrame extends JPanel implements ActionListener {
 		notesField.setLineWrap(true);
 		notesField.setWrapStyleWord(true);
 		
+		int y = 0;
+		
 		c.gridx = 0;
-		c.gridy = 0;
+		c.gridy = y;
+		y += 1;
 		c.gridwidth = 2;
 		Insets oldInsets = c.insets;
 		c.insets = new Insets(10, 0, 24, 0);
@@ -66,21 +69,24 @@ public class SignupFrame extends JPanel implements ActionListener {
 		c.gridwidth = 1;
 		
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = y;
+		y += 1;
 		SignupScreen.add(new JLabel("First Name: "), c);
 		
 		c.gridx = 1;
 		SignupScreen.add(fnameField, c);
 		
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = y;
+		y += 1;
 		SignupScreen.add(new JLabel("Last Name: "), c);
 		
 		c.gridx = 1;
 		SignupScreen.add(lnameField, c);
 		
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = y;
+		y += 1;
 		SignupScreen.add(new JLabel("Email: "), c);
 		
 		c.gridx = 1;
@@ -89,8 +95,9 @@ public class SignupFrame extends JPanel implements ActionListener {
 		if (tutee) {
 
 			c.gridx = 0;
-			c.gridy = 4;
+			c.gridy = y;
 			c.gridheight = 3;
+			y += 3;
 			SignupScreen.add(new JLabel("<html>Subject - Be sure that the class<br /> you select matches your"
 					+ "<br />current math class name EXACTLY: </html>"), c);
 			
@@ -99,13 +106,15 @@ public class SignupFrame extends JPanel implements ActionListener {
 			SignupScreen.add(subjectComboBox, c);
 			
 			c.gridx = 0;
-			c.gridy = 7;
+			c.gridy = y;
+			y += 1;
 			c.gridwidth = 2;
 			SignupScreen.add(new JLabel("Tutors Available: "), c);
 		} else {
 			c.gridx = 0;
-			c.gridy = 4;
+			c.gridy = y;
 			c.gridheight = 2;
+			y += 2;
 			SignupScreen.add(new JLabel("<html>Subject - select the highest<br /> level class you can "
 					+ "teach: </html>"), c);
 			
@@ -116,21 +125,23 @@ public class SignupFrame extends JPanel implements ActionListener {
 			//dates available
 			
 			c.gridx = 0;
-			c.gridy = 6;
+			c.gridy = y;
 			c.gridheight = 1;
 			SignupScreen.add(new JLabel("Dates Available: "), c);
 			
 			c.gridx = 1;
 			c.gridheight = 6;
+			y += 6;
 			SignupScreen.add(datesAvailableField, c);
 			
 			c.gridx = 0;
-			c.gridy = 12;
+			c.gridy = y;
 			c.gridheight = 1;
 			SignupScreen.add(new JLabel("Additional Notes: "), c);
 			
 			c.gridx = 1;
 			c.gridheight = 7;
+			y += 7;
 			SignupScreen.add(notesField, c);
 		}
 		

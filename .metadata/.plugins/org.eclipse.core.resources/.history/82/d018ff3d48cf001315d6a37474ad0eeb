@@ -1,0 +1,37 @@
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.*;
+
+
+public class SessionReportFrame extends JPanel implements ActionListener {
+
+	private String tutor;
+	private String tutee;
+	private JPanel ReportScreen;
+	
+	public SessionReportFrame() {
+		ReportScreen = new JPanel();
+		ReportScreen.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(15, 0, 0, 15);
+		
+		int y = 0;
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		y += 1;
+		ReportScreen.add(new JLabel("Tutor: " + tutor), c);
+		
+		c.gridx = 1;
+		ReportScreen.add(new JLabel("Tutee: " + tutee), c);
+	}
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}
