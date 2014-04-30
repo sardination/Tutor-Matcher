@@ -2,6 +2,7 @@ import javax.swing.JApplet;
 import javax.swing.SwingUtilities;
 
 
+@SuppressWarnings("serial")
 public class MatcherMain extends JApplet {
 
 

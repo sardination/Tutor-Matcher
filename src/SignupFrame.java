@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class SignupFrame extends JPanel implements ActionListener {
 
 	private JPanel SignupScreen;
