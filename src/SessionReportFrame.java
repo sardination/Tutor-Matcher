@@ -1,10 +1,12 @@
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -23,6 +25,8 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 	private JPanel ReportScreen;
 	private JTextField minutesField;
 	private JTextArea notesField;
+	private JButton saveButton;
+	private JButton cancelButton;
 	
 	//JDatePicker... hi.jar from: http://jdatepicker.org/ and implementation code from:
 	// http://www.codejava.net/java-se/swing/how-to-use-jdatepicker-to-display-calendar-component
@@ -43,6 +47,8 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		JPanel minutesFieldWrapper = new JPanel(new FlowLayout(0,0, FlowLayout.LEADING));
 		minutesFieldWrapper.add(minutesField);
 		notesField = new JTextArea(6,30);
+		saveButton = new JButton("Save");
+		cancelButton = new JButton("Cancel");
 		
 		int y = 0;
 		
@@ -77,6 +83,7 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		c.gridx = 1;
 		ReportScreen.add(minutesFieldWrapper, c);
 		
+		c.gridx = 0;
 		c.gridy = y;
 		ReportScreen.add(new JLabel("Additional Notes: "), c);
 		
@@ -84,6 +91,17 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		c.gridheight = 6;
 		y += 6;
 		ReportScreen.add(notesField, c);
+		
+		c.gridx = 0;
+		c.gridy = y;
+		c.gridheight = 1;
+		c.gridwidth = 2;
+		c.insets = new Insets(50,0,15,0);
+		JPanel savePanel = new JPanel();
+		savePanel.setLayout(new GridLayout(1,2));
+		savePanel.add(saveButton);
+		savePanel.add(cancelButton);
+		ReportScreen.add(savePanel, c);
 		
 		this.add(ReportScreen);
 	}

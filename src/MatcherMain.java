@@ -26,7 +26,7 @@ public class MatcherMain extends JApplet {
 	
 	private void createGUI() {
 		setSize(1000,400);
-		SessionReportFrame testFrame = new SessionReportFrame();
+		SignupFrame testFrame = new SignupFrame(false);
 		testFrame.setBounds(0,0,1000,1000);
 		setContentPane(testFrame);
 	}
