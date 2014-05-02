@@ -14,7 +14,6 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -29,7 +28,6 @@ public class SignupFrame extends JPanel implements ActionListener {
 	private JTextField lnameField;
 	private JTextField emailField;
 	private JComboBox subjectComboBox;
-	private JTable availableTutorsTable;
 	private boolean tutee = false;
 	private JTextArea datesAvailableField;
 	private JTextArea notesField;
@@ -61,11 +59,10 @@ public class SignupFrame extends JPanel implements ActionListener {
 		emailField = new JTextField(30);
 		subjectComboBox = new JComboBox(subjectList);
 		subjectComboBox.addActionListener(this);
-		availableTutorsTable = new JTable();
-		datesAvailableField = new JTextArea(6,30);
+		datesAvailableField = new JTextArea(3,30);
 		datesAvailableField.setLineWrap(true);
 		datesAvailableField.setWrapStyleWord(true);
-		notesField = new JTextArea(6,30);
+		notesField = new JTextArea(3,30);
 		notesField.setLineWrap(true);
 		notesField.setWrapStyleWord(true);
 		saveButton = new JButton("Save");
@@ -129,11 +126,6 @@ public class SignupFrame extends JPanel implements ActionListener {
 			c.gridheight = 1;
 			SignupScreen.add(subjectComboBox, c);
 			
-			c.gridx = 0;
-			c.gridy = y;
-			y += 1;
-			c.gridwidth = 2;
-			SignupScreen.add(new JLabel("Tutors Available: "), c);
 		} else {
 			c.gridx = 0;
 			c.gridy = y;
@@ -154,8 +146,8 @@ public class SignupFrame extends JPanel implements ActionListener {
 			SignupScreen.add(new JLabel("Dates Available: "), c);
 			
 			c.gridx = 1;
-			c.gridheight = 6;
-			y += 6;
+			c.gridheight = 3;
+			y += 3;
 			SignupScreen.add(datesAvailableField, c);
 			
 			c.gridx = 0;
@@ -164,8 +156,8 @@ public class SignupFrame extends JPanel implements ActionListener {
 			SignupScreen.add(new JLabel("Additional Notes: "), c);
 			
 			c.gridx = 1;
-			c.gridheight = 7;
-			y += 7;
+			c.gridheight = 3;
+			y += 3;
 			SignupScreen.add(notesField, c);
 		}
 		
@@ -204,7 +196,7 @@ public class SignupFrame extends JPanel implements ActionListener {
 				} else {
 					writeInfo = fnameField.getText()+","+lnameField.getText()+","
 							+emailField.getText()+","+subjectNum+","+subjectList[subjectNum]
-							+datesAvailableField.getText()+","+notesField.getText()+","+"\n";
+							+","+datesAvailableField.getText()+","+notesField.getText()+"\n";
 				}
 				
 				output = new BufferedWriter(new FileWriter(file.getName(), true));
