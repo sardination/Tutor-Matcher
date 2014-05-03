@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -12,6 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 @SuppressWarnings("serial")
 public class TutorTableFrame extends JPanel implements ActionListener {
@@ -28,16 +31,25 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 	public TutorTableFrame(int num) {
 		subjectNum = num;
 		TableScreen = new JPanel();
-		TableScreen.setLayout(new BorderLayout());
+		TableScreen.setLayout(new BorderLayout(0,10));
 		TableScreen.add(new JLabel("Select a row to view more about the tutor",
 				SwingConstants.CENTER),BorderLayout.NORTH);
-		infoScreen = new JTextArea(15,15);
+		infoScreen = new JTextArea(7,9);
 		infoScreen.setEditable(false);
 
 		findTutors();
 
 		table = new JTable(tutorInfo,columnNames);
+		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+			public void valueChanged(ListSelectionEvent event) {
+				int row = table.getSelectedRow();
+				infoScreen.setText("Name: "+tutorInfo[row][0]+" "+tutorInfo[row][1]+"\n"+
+				"Email: "+tutorInfo[row][2]+"\n"+"Times Available: "+tutorInfo[row][3]+
+				"\n"+"Additional Notes: "+tutorInfo[row][4]);
+			}
+		});
 		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setPreferredSize(new Dimension(400,200));
 		table.setFillsViewportHeight(true);
 		
 		TableScreen.add(infoScreen,BorderLayout.SOUTH);
@@ -85,14 +97,8 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		if (event.getSource().equals(table)) {
-			int row = table.getSelectedRow();
-			infoScreen.setText("Name: "+tutorInfo[row][0]+tutorInfo[row][1]+"\n"+
-			"Email: "+tutorInfo[row][2]+"\n"+"Highest Subject Taught: "+tutorInfo[row][4]+
-			"\n"+"Times Available: "+tutorInfo[row][5]+"\n"+"Additional Notes: "
-			+tutorInfo[row][6]);
-		}
-		
+		// TODO Auto-generated method stub
+
 	}
 
 }

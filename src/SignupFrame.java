@@ -174,11 +174,7 @@ public class SignupFrame extends JPanel implements ActionListener {
 		
 		this.add(SignupScreen);
 	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
