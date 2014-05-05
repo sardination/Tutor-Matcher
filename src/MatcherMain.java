@@ -28,7 +28,8 @@ public class MatcherMain extends JApplet {
 		setSize(600,400);
 		//SignupFrame testFrame = new SignupFrame(false);
 		//SessionReportFrame testFrame = new SessionReportFrame();
-		TutorTableFrame testFrame = new TutorTableFrame(2);
+		//TutorTableFrame testFrame = new TutorTableFrame(2);
+		MainFrame testFrame = new MainFrame();
 		testFrame.setBounds(0,0,1000,1000);
 		setContentPane(testFrame); 
 	}

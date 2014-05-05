@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
 public class TutorTableFrame extends JPanel implements ActionListener {
@@ -39,7 +40,13 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 
 		findTutors();
 
-		table = new JTable(tutorInfo,columnNames);
+		table = new JTable();
+		DefaultTableModel model = new DefaultTableModel(tutorInfo,columnNames) {
+			public boolean isCellEditable(int row, int col) {
+				return false;
+			}
+		};
+		table.setModel(model);
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 			public void valueChanged(ListSelectionEvent event) {
 				int row = table.getSelectedRow();
