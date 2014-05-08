@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -59,10 +60,10 @@ public class SignupFrame extends JPanel implements ActionListener {
 		emailField = new JTextField(30);
 		subjectComboBox = new JComboBox(subjectList);
 		subjectComboBox.addActionListener(this);
-		datesAvailableField = new JTextArea(3,30);
+		datesAvailableField = new JTextArea(2,30);
 		datesAvailableField.setLineWrap(true);
 		datesAvailableField.setWrapStyleWord(true);
-		notesField = new JTextArea(3,30);
+		notesField = new JTextArea(2,30);
 		notesField.setLineWrap(true);
 		notesField.setWrapStyleWord(true);
 		saveButton = new JButton("Save");
@@ -148,7 +149,8 @@ public class SignupFrame extends JPanel implements ActionListener {
 			c.gridx = 1;
 			c.gridheight = 3;
 			y += 3;
-			SignupScreen.add(datesAvailableField, c);
+			JScrollPane scrollPane1 = new JScrollPane(datesAvailableField);
+			SignupScreen.add(scrollPane1, c);
 			
 			c.gridx = 0;
 			c.gridy = y;
@@ -158,14 +160,15 @@ public class SignupFrame extends JPanel implements ActionListener {
 			c.gridx = 1;
 			c.gridheight = 3;
 			y += 3;
-			SignupScreen.add(notesField, c);
+			JScrollPane scrollPane2 = new JScrollPane(notesField);
+			SignupScreen.add(scrollPane2, c);
 		}
 		
 		c.gridx = 0;
 		c.gridy = y;
 		c.gridheight = 1;
 		c.gridwidth = 2;
-		c.insets = new Insets(50,0,15,0);
+		c.insets = new Insets(20,0,15,0);
 		JPanel savePanel = new JPanel();
 		savePanel.setLayout(new GridLayout(1,2));
 		savePanel.add(saveButton);

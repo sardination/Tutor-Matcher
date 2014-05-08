@@ -27,7 +27,7 @@ public class MainFrame extends JPanel implements ActionListener{
 	private JButton registerButton;
 	
 	public MainFrame() {
-		mainScreen = new JPanel(new BorderLayout());
+		mainScreen = new JPanel(new BorderLayout(0,10));
 		signinPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -71,7 +71,7 @@ public class MainFrame extends JPanel implements ActionListener{
 		c.gridwidth = 2;
 		signinPanel.add(signinButton,c);
 		
-		registerPanel.add(new JLabel("Aren't Registered as a tutor or tutee?"));
+		registerPanel.add(new JLabel("Aren't registered as a tutor or tutee?    "));
 		registerPanel.add(registerButton);
 		
 		mainScreen.add(new JLabel("Welcome to the Tutor Matcher!", 
@@ -88,8 +88,11 @@ public class MainFrame extends JPanel implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource().equals(registerButton)) {
+			//!!!! have radio buttons for choosing whether to register or sign in as a tutor or a tutee
+			
+		}
 		
 	}
 

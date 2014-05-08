@@ -36,7 +36,10 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 		TableScreen.add(new JLabel("Select a row to view more about the tutor",
 				SwingConstants.CENTER),BorderLayout.NORTH);
 		infoScreen = new JTextArea(7,9);
+		infoScreen.setMaximumSize(new Dimension(7,9));
 		infoScreen.setEditable(false);
+		infoScreen.setLineWrap(false);
+		infoScreen.setWrapStyleWord(true);
 
 		findTutors();
 
