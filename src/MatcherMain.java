@@ -5,11 +5,11 @@ import javax.swing.SwingUtilities;
 @SuppressWarnings("serial")
 public class MatcherMain extends JApplet {
 
+	public static MainFrame mainframe;
+	public static SignupFrame signupframe;
+	public static SessionReportFrame sessionreportframe;
+	public static TutorTableFrame tutortableframe;
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 	public void init() {
         //Execute a job on the event-dispatching thread; creating this applet's GUI.
@@ -24,14 +24,43 @@ public class MatcherMain extends JApplet {
         }
 	}
 	
+	public static void setSignup(boolean tutee) {
+		signupframe = new SignupFrame(tutee);
+	}
+	
 	private void createGUI() {
 		setSize(600,400);
-		//SignupFrame testFrame = new SignupFrame(false);
-		//SessionReportFrame testFrame = new SessionReportFrame();
-		TutorTableFrame testFrame = new TutorTableFrame(2);
-		//MainFrame testFrame = new MainFrame();
-		testFrame.setBounds(0,0,1000,1000);
-		setContentPane(testFrame); 
+		mainframe = new MainFrame();
+		mainframe.setBounds(0,0,1000,1000);
+		setContentPane(mainframe);
+		
+		/*Tutor Signup*/
+		/*
+		signupframe = new SignupFrame(false);
+		signupframe.setBounds(0,0,1000,1000);
+		setContentPane(signupframe);
+		 */
+		
+		/*Tutee Signup*/
+		/*
+		signupframe = new SignupFrame(true);
+		signupframe.setBounds(0,0,1000,1000);
+		setContentPane(signupframe);
+		 */
+		
+		/*Session Report*/
+		/*
+		sessionreportframe = new SessionReportFrame();
+		sessionreportframe.setBounds(0,0,1000,1000);
+		setContentPane(sessionreportframe);
+		 */
+		
+		/*Tutor Table*/
+		/*
+		tutortableframe = new TutorTableFrame(0);
+		tutortableframe.setBounds(0,0,1000,1000);
+		setContentPane(tutortableframe);
+		 */
 	}
 	
 }

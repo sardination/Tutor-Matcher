@@ -36,10 +36,12 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 		TableScreen.add(new JLabel("Select a row to view more about the tutor",
 				SwingConstants.CENTER),BorderLayout.NORTH);
 		infoScreen = new JTextArea(7,9);
-		infoScreen.setMaximumSize(new Dimension(7,9));
+		//infoScreen.setPreferredSize(new Dimension(7,9));
+		//infoScreen.setMaximumSize(new Dimension(7,9));
 		infoScreen.setEditable(false);
-		infoScreen.setLineWrap(false);
+		infoScreen.setLineWrap(true);
 		infoScreen.setWrapStyleWord(true);
+		JScrollPane infoscrollPane = new JScrollPane(infoScreen);
 
 		findTutors();
 
@@ -53,17 +55,17 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 		table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
 			public void valueChanged(ListSelectionEvent event) {
 				int row = table.getSelectedRow();
-				infoScreen.setText("Name: "+tutorInfo[row][0]+" "+tutorInfo[row][1]+"\n"+
-				"Email: "+tutorInfo[row][2]+"\n"+"Times Available: "+tutorInfo[row][3]+
-				"\n"+"Additional Notes: "+tutorInfo[row][4]);
+				infoScreen.setText("Name: "+tutorInfo[row][0]+" "+tutorInfo[row][1]+"\n\n"+
+				"Email: "+tutorInfo[row][2]+"\n\n"+"Times Available: "+tutorInfo[row][3]+
+				"\n\n"+"Additional Notes: "+tutorInfo[row][4]);
 			}
 		});
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setPreferredSize(new Dimension(400,200));
+		JScrollPane tablescrollPane = new JScrollPane(table);
+		tablescrollPane.setPreferredSize(new Dimension(400,200));
 		table.setFillsViewportHeight(true);
 		
-		TableScreen.add(infoScreen,BorderLayout.SOUTH);
-		TableScreen.add(scrollPane,BorderLayout.CENTER);
+		TableScreen.add(infoscrollPane,BorderLayout.SOUTH);
+		TableScreen.add(tablescrollPane,BorderLayout.CENTER);
 		
 		this.add(TableScreen);
 	}
@@ -99,11 +101,7 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 		}
 		
 	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {

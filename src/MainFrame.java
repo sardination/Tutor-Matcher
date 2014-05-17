@@ -6,12 +6,15 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 
 @SuppressWarnings("serial")
@@ -38,7 +41,15 @@ public class MainFrame extends JPanel implements ActionListener{
 		lnameField = new JTextField(10);
 		pwField = new JPasswordField(10);
 		signinButton = new JButton("Sign In");
+		signinButton.addActionListener(this);
 		registerButton = new JButton("Register Now");
+		registerButton.addActionListener(this);
+		
+		ButtonGroup bg = new ButtonGroup();
+		JRadioButton tutorChoice = new JRadioButton("Tutor");
+		JRadioButton tuteeChoice = new JRadioButton("Tutee");
+		bg.add(tutorChoice);
+		bg.add(tuteeChoice);
 		
 		int y = 0;
 		
@@ -74,7 +85,7 @@ public class MainFrame extends JPanel implements ActionListener{
 		registerPanel.add(new JLabel("Aren't registered as a tutor or tutee?    "));
 		registerPanel.add(registerButton);
 		
-		mainScreen.add(new JLabel("Welcome to the Tutor Matcher!", 
+		mainScreen.add(new JLabel("Welcome to the Tutor Matcher! Please log in.    ", 
 				SwingConstants.CENTER), BorderLayout.NORTH);
 		mainScreen.add(signinPanel, BorderLayout.CENTER);
 		mainScreen.add(registerPanel, BorderLayout.SOUTH);
@@ -82,16 +93,16 @@ public class MainFrame extends JPanel implements ActionListener{
 		this.add(mainScreen);
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getSource().equals(registerButton)) {
 			//!!!! have radio buttons for choosing whether to register or sign in as a tutor or a tutee
-			
+			this.setVisible(false);
+			MatcherMain parent = (MatcherMain) SwingUtilities.getWindowAncestor(this).
+					getComponent(0).getComponentAt(0, 0);
+			MatcherMain.setSignup(false);
+			parent.setContentPane(MatcherMain.signupframe);
 		}
 		
 	}

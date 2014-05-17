@@ -24,6 +24,7 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 	private String tutee;
 	private JPanel ReportScreen;
 	private JTextField minutesField;
+	private JTextField supervisorField;
 	private JTextArea notesField;
 	private JButton saveButton;
 	private JButton cancelButton;
@@ -46,6 +47,7 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		minutesField = new JTextField(3);
 		JPanel minutesFieldWrapper = new JPanel(new FlowLayout(0,0, FlowLayout.LEADING));
 		minutesFieldWrapper.add(minutesField);
+		supervisorField = new JTextField(3);
 		notesField = new JTextArea(6,30);
 		saveButton = new JButton("Save");
 		cancelButton = new JButton("Cancel");
@@ -85,6 +87,14 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		
 		c.gridx = 0;
 		c.gridy = y;
+		y += 1;
+		ReportScreen.add(new JLabel("Supervisor Email Address: "), c);
+		
+		c.gridx = 1;
+		ReportScreen.add(supervisorField, c);
+		
+		c.gridx = 0;
+		c.gridy = y;
 		ReportScreen.add(new JLabel("Additional Notes: "), c);
 		
 		c.gridx = 1;
@@ -96,7 +106,7 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		c.gridy = y;
 		c.gridheight = 1;
 		c.gridwidth = 2;
-		c.insets = new Insets(50,0,15,0);
+		c.insets = new Insets(30,0,15,0);
 		JPanel savePanel = new JPanel();
 		savePanel.setLayout(new GridLayout(1,2));
 		savePanel.add(saveButton);
@@ -106,14 +116,12 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		this.add(ReportScreen);
 	}
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+	public void actionPerformed(ActionEvent event) {
+		if (event.getSource().equals(saveButton)) {
+			
+		}
 		
 	}
 

@@ -202,8 +202,11 @@ public class SignupFrame extends JPanel implements ActionListener {
 				output.write(writeInfo);
 				output.close();
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(SignupScreen, "Sorry, Something Went Wrong.");
+				JOptionPane.showMessageDialog(SignupScreen, "Sorry, something went Wrong!");
 			}
+		} else if (event.getSource().equals(cancelButton)) {
+			this.setVisible(false);
+			this.getParent().remove(this);
 		}
 	}
 
