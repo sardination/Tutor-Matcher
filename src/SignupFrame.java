@@ -4,7 +4,9 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.Writer;
 import java.io.File;
@@ -18,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 @SuppressWarnings("serial")
 public class SignupFrame extends JPanel implements ActionListener {
@@ -36,6 +39,7 @@ public class SignupFrame extends JPanel implements ActionListener {
 	private JButton cancelButton;
 	private int subjectNum = 0; //if tutee, this is the index of their class in the array
 								//if tutor, this is the index of the highest level class they can teach
+	private boolean editing = false;
 	
 	private String[] subjectList = {"Algebra 1", "Geometry", "Honors Geometry", "Bridge to Algebra 2", 
 			"Algebra 2", "Honors Algebra 2", "Pre-Calculus", "Honors Pre-Calculus",
@@ -45,9 +49,9 @@ public class SignupFrame extends JPanel implements ActionListener {
 			"Magnet Analysis", "Multi-Variable Calculus", "Vector Calculus",
 			"Linear Algebra", "Applied Statistics"};
 	
-	public SignupFrame(boolean tute) {
+	public SignupFrame(boolean t) {
 		
-		tutee = tute;
+		tutee = t;
 		
 		SignupScreen = new JPanel();
 		SignupScreen.setLayout(new GridBagLayout());
@@ -55,15 +59,15 @@ public class SignupFrame extends JPanel implements ActionListener {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(15, 0, 0, 15);
 		
-		fnameField = new JTextField(30);
-		lnameField = new JTextField(30);
-		emailField = new JTextField(30);
+		fnameField = new JTextField(25);
+		lnameField = new JTextField(25);
+		emailField = new JTextField(25);
 		subjectComboBox = new JComboBox(subjectList);
 		subjectComboBox.addActionListener(this);
-		datesAvailableField = new JTextArea(2,30);
+		datesAvailableField = new JTextArea(2,25);
 		datesAvailableField.setLineWrap(true);
 		datesAvailableField.setWrapStyleWord(true);
-		notesField = new JTextArea(2,30);
+		notesField = new JTextArea(2,25);
 		notesField.setLineWrap(true);
 		notesField.setWrapStyleWord(true);
 		saveButton = new JButton("Save");
@@ -120,8 +124,8 @@ public class SignupFrame extends JPanel implements ActionListener {
 			c.gridy = y;
 			c.gridheight = 3;
 			y += 3;
-			SignupScreen.add(new JLabel("<html>Subject - Be sure that the class<br /> you select matches your"
-					+ "<br />current math class name EXACTLY: </html>"), c);
+			SignupScreen.add(new JLabel("<html>Subject - Be sure that the<br />class you select matches"
+					+ "<br />your current math<br />class name EXACTLY: </html>"), c);
 			
 			c.gridx = 1;
 			c.gridheight = 1;
@@ -177,36 +181,90 @@ public class SignupFrame extends JPanel implements ActionListener {
 		
 		this.add(SignupScreen);
 	}
+	
+	public void setEditing(boolean e, String f, String l, String em) {
+		editing = e;
+		String fname = f;
+		String lname = l;
+		String email = em;
+	}
 
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		MatcherMain parent = (MatcherMain) SwingUtilities.getWindowAncestor(this).
+				getComponent(0).getComponentAt(0, 0);
 		if (event.getSource().equals(subjectComboBox)) {
 			subjectNum = subjectComboBox.getSelectedIndex();
 		} else if (event.getSource().equals(saveButton)) {
-			Writer output;
+			
+			boolean alreadyExists = false;
+			BufferedReader br = null;
 			try {
-				File file = new File("tutorlist.csv");
-				String writeInfo = "";
+				
+				String currentLine = "";
+				
 				if (tutee) {
-					file = new File("tuteelist.csv");
-					writeInfo = fnameField.getText()+","+lnameField.getText()+","
-							+emailField.getText()+","+subjectNum+","+subjectList[subjectNum]+"\n";
+					br = new BufferedReader(new FileReader("tuteelist.csv"));
 				} else {
-					writeInfo = fnameField.getText()+","+lnameField.getText()+","
-							+emailField.getText()+","+subjectNum+","+subjectList[subjectNum]
-							+","+datesAvailableField.getText()+","+notesField.getText()+"\n";
+					br = new BufferedReader(new FileReader("tutorlist.csv"));
+				}
+
+				
+				while (currentLine != null) {
+					currentLine = br.readLine();
+					if (currentLine.contains(fnameField.getText()+","+lnameField.getText()+","+emailField.getText())) {
+						alreadyExists = true;
+					}
+					
+					if (alreadyExists) break;
+					currentLine = br.readLine();
 				}
 				
-				output = new BufferedWriter(new FileWriter(file.getName(), true));
-				output.write(writeInfo);
-				output.close();
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(SignupScreen, "Sorry, something went Wrong!");
 			}
+			
+			if (fnameField.getText().equals("") || lnameField.getText().equals("") || emailField.getText().equals("")) {
+				JOptionPane.showMessageDialog(SignupScreen,"Please enter information in all of the fields.");
+			} else if (alreadyExists){
+				JOptionPane.showMessageDialog(SignupScreen,"This user already exists.");
+			} else {
+				Writer output;
+				try {
+					File file = new File("tutorlist.csv");
+					String writeInfo = "";
+					if (tutee) {
+						file = new File("tuteelist.csv");
+						String f = fnameField.getText().replace("\n","    ");
+						String l = lnameField.getText().replace("\n","    ");
+						String e = emailField.getText().replace("\n","    ");
+						writeInfo = f+","+l+","+e+","+subjectNum+","+subjectList[subjectNum]+"\n";
+					} else {
+						String f = fnameField.getText().replace("\n","    ");
+						String l = lnameField.getText().replace("\n","    ");
+						String e = emailField.getText().replace("\n","    ");
+						String d = datesAvailableField.getText().replace("\n","    ");
+						String n = datesAvailableField.getText().replace("\n","    ");
+						writeInfo = f+","+l+","+e+","+subjectNum+","+subjectList[subjectNum]+","+d+","+n+"\n";
+					}
+					
+					output = new BufferedWriter(new FileWriter(file.getName(), true));
+					output.write(writeInfo);
+					output.close();
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(SignupScreen, "Sorry, something went wrong!");
+				}
+				
+				this.setVisible(false);
+				this.getParent().remove(this);
+				MatcherMain.setOptionsFrame(fnameField.getText(), lnameField.getText(), emailField.getText(), tutee);
+				parent.setContentPane(MatcherMain.optionsframe);
+			}	
 		} else if (event.getSource().equals(cancelButton)) {
 			this.setVisible(false);
 			this.getParent().remove(this);
+			MatcherMain.setMainFrame();
+			parent.setContentPane(MatcherMain.mainframe);
 		}
 	}
 

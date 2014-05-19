@@ -84,7 +84,8 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 				currentLine = br.readLine();
 			}
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(TableScreen, "Sorry, Something Went Wrong.");
+			JOptionPane.showMessageDialog(TableScreen, "Sorry, please come back later. There are"
+					+ " currently no tutors registered.");
 		}
 		
 		tutorInfo = new String[fileInfo.size()][5];
@@ -92,6 +93,30 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 		int index = 0;
 		for (String i:fileInfo) {
 			String[] tempInfo = i.split(",");
+			if (tempInfo.length == 6) {
+				String[] temptempInfo = new String[7];
+				for (int j=0; j<6; j++) {
+					temptempInfo[j] = tempInfo[j];
+				}
+				temptempInfo[6] = "";
+				tempInfo = new String[7];
+				for (int j=0; j<7; j++) {
+					tempInfo[j] = temptempInfo[j];
+				}
+			} else if (tempInfo.length == 5) {
+				String[] temptempInfo = new String[7];
+				for (int j=0; j<5; j++) {
+					temptempInfo[j] = tempInfo[j];
+				}
+				temptempInfo[5] = "";
+				temptempInfo[6] = "";
+				tempInfo = new String[7];
+				for (int j=0; j<7; j++) {
+					tempInfo[j] = temptempInfo[j];
+				}
+			}
+
+			
 			tutorInfo[index][0] = tempInfo[0];
 			tutorInfo[index][1] = tempInfo[1];
 			tutorInfo[index][2] = tempInfo[2];
