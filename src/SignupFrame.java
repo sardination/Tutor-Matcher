@@ -40,6 +40,7 @@ public class SignupFrame extends JPanel implements ActionListener {
 	private int subjectNum = 0; //if tutee, this is the index of their class in the array
 								//if tutor, this is the index of the highest level class they can teach
 	private boolean editing = false;
+	private String[] existingInfo;
 	
 	private String[] subjectList = {"Algebra 1", "Geometry", "Honors Geometry", "Bridge to Algebra 2", 
 			"Algebra 2", "Honors Algebra 2", "Pre-Calculus", "Honors Pre-Calculus",
@@ -182,11 +183,44 @@ public class SignupFrame extends JPanel implements ActionListener {
 		this.add(SignupScreen);
 	}
 	
-	public void setEditing(boolean e, String f, String l, String em) {
-		editing = e;
-		String fname = f;
-		String lname = l;
-		String email = em;
+	
+	public void setEditing(String f, String l, String em) {
+		editing = true;
+		
+		BufferedReader br = null;
+		
+		try {
+			if (tutee) {
+				br = new BufferedReader(new FileReader("tuteelist.csv"));
+				String currentLine = br.readLine();
+				
+				while (currentLine != null) {
+					if (currentLine.contains(f+","+l+","+em)) {
+						existingInfo = currentLine.split(",");
+						break;
+					}
+					currentLine = br.readLine();
+				}
+			} else {
+				br = new BufferedReader(new FileReader("tutorlist.csv"));
+				String currentLine = br.readLine();
+				while (currentLine != null) {
+					if (currentLine.contains(f+","+l+","+em)) {
+						existingInfo = currentLine.split(",");
+						break;
+					}
+					currentLine = br.readLine();
+				}
+				datesAvailableField.setText(existingInfo[5]);
+				notesField.setText(existingInfo[6]);
+			}
+			
+			fnameField.setText(existingInfo[0]);
+			lnameField.setText(existingInfo[1]);
+			emailField.setText(existingInfo[2]);
+			subjectComboBox.setSelectedIndex(Integer.parseInt(existingInfo[3]));
+		} catch (Exception e) {
+		}
 	}
 
 
@@ -197,7 +231,6 @@ public class SignupFrame extends JPanel implements ActionListener {
 		if (event.getSource().equals(subjectComboBox)) {
 			subjectNum = subjectComboBox.getSelectedIndex();
 		} else if (event.getSource().equals(saveButton)) {
-			
 			boolean alreadyExists = false;
 			BufferedReader br = null;
 			try {
@@ -245,7 +278,7 @@ public class SignupFrame extends JPanel implements ActionListener {
 						String e = emailField.getText().replace("\n","    ");
 						String d = datesAvailableField.getText().replace("\n","    ");
 						String n = datesAvailableField.getText().replace("\n","    ");
-						writeInfo = f+","+l+","+e+","+subjectNum+","+subjectList[subjectNum]+","+d+","+n+"\n";
+						writeInfo = f+","+l+","+e+","+subjectNum+","+subjectList[subjectNum]+","+d+","+n+","+"[]"+"\n";
 					}
 					
 					output = new BufferedWriter(new FileWriter(file.getName(), true));
@@ -257,7 +290,7 @@ public class SignupFrame extends JPanel implements ActionListener {
 				
 				this.setVisible(false);
 				this.getParent().remove(this);
-				MatcherMain.setOptionsFrame(fnameField.getText(), lnameField.getText(), emailField.getText(), tutee);
+				MatcherMain.setOptionsFrame(subjectList[subjectNum], fnameField.getText(), lnameField.getText(), emailField.getText(), tutee);
 				parent.setContentPane(MatcherMain.optionsframe);
 			}	
 		} else if (event.getSource().equals(cancelButton)) {

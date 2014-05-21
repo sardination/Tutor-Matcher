@@ -37,20 +37,24 @@ public class MatcherMain extends JApplet {
 		signupframe = new SignupFrame(tutee);
 	}
 	
-	public static void setEditingFrame(boolean tutee, String f, String l, String e) {
-		signupframe = new SignupFrame(tutee);
+	public static void setEditing(String f, String l, String e) {
+		signupframe.setEditing(f, l, e);
 	}
 	
 	public static void setMainFrame() {
 		mainframe = new MainFrame();
 	}
 	
-	public static void setOptionsFrame(String f, String l, String e, boolean tutee) {
-		optionsframe = new OptionsFrame(f, l, e, tutee);
+	public static void setOptionsFrame(String s, String f, String l, String e, boolean tutee) {
+		optionsframe = new OptionsFrame(s, f, l, e, tutee);
 	}
 	
-	public static void setTutorTableFrame(int subj) {
-		tutortableframe = new TutorTableFrame(subj);
+	public static void setTutorTableFrame(int subj, String email, String fname, String lname, String subject) {
+		tutortableframe = new TutorTableFrame(subj, email, fname, lname, subject);
+	}
+	
+	public static void setSessionReportFrame(String tuto, String tute) {
+		sessionreportframe = new SessionReportFrame(tuto, tute);
 	}
 	
 	private void createGUI() {

@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -19,7 +20,8 @@ public class OptionsFrame extends JPanel implements ActionListener{
 	private String fname = "";
 	private String lname = "";
 	private String email = "";
-	private int subject;
+	private int subjectnum;
+	private String subj = "";
 	
 	private JButton editButton;
 	private JButton reportButton;
@@ -27,15 +29,27 @@ public class OptionsFrame extends JPanel implements ActionListener{
 	private JButton logButton;
 	private JButton logoutButton;
 	
-	public OptionsFrame(String f, String l, String e, boolean t) {
+	private JComboBox tuteeComboBox;
+	
+	private String[] tuteeList = {"a","b"};
+	
+	public OptionsFrame(String s, String f, String l, String e, boolean t) {
+		subj = s;
 		tutee = t;
 		fname = f;
 		lname = l;
 		email = e;
 		editButton = new JButton("Edit Your Information");
 		editButton.addActionListener(this);
-		reportButton = new JButton("Submit Session Report");
+		
+		//Session Report Panel
+		JPanel sessionReportPanel = new JPanel(new GridLayout(1,2));
+		reportButton = new JButton("Submit Session Report for -->");
 		reportButton.addActionListener(this);
+		tuteeComboBox = new JComboBox(tuteeList);
+		sessionReportPanel.add(reportButton);
+		sessionReportPanel.add(tuteeComboBox);
+		
 		viewTutorsButton = new JButton("View Tutors");
 		viewTutorsButton.addActionListener(this);
 		logButton = new JButton("View Session Log");
@@ -53,7 +67,7 @@ public class OptionsFrame extends JPanel implements ActionListener{
 			optionsPanel = new JPanel(new GridLayout(5,1));
 			optionsPanel.add(new JLabel("Welcome Tutor "+fname+" "+lname, SwingConstants.CENTER));
 			optionsPanel.add(editButton);
-			optionsPanel.add(reportButton);
+			optionsPanel.add(sessionReportPanel);
 			optionsPanel.add(logButton);
 			optionsPanel.add(logoutButton);
 		}
@@ -80,7 +94,7 @@ public class OptionsFrame extends JPanel implements ActionListener{
 				}
 			}
 			
-			subject = Integer.valueOf(infoLine[3]);
+			subjectnum = Integer.valueOf(infoLine[3]);
 			
 		} catch (Exception ex) {
 		}
@@ -93,13 +107,20 @@ public class OptionsFrame extends JPanel implements ActionListener{
 		MatcherMain parent = (MatcherMain) SwingUtilities.getWindowAncestor(this).
 				getComponent(0).getComponentAt(0, 0);
 		if (event.getSource().equals(editButton)) {
-			
+			this.setVisible(false);
+			this.getParent().remove(this);
+			MatcherMain.setSignupFrame(tutee);
+			MatcherMain.setEditing(fname, lname, email);
+			parent.setContentPane(MatcherMain.signupframe);
 		} else if (event.getSource().equals(reportButton)) {
-			
+			this.setVisible(false);
+			this.getParent().remove(this);
+			MatcherMain.setSessionReportFrame(this.fname+" "+this.lname, tuteeList[tuteeComboBox.getSelectedIndex()]);
+			parent.setContentPane(MatcherMain.sessionreportframe);
 		} else if (event.getSource().equals(viewTutorsButton)) {
 			this.setVisible(false);
 			this.getParent().remove(this);
-			MatcherMain.setTutorTableFrame(subject);
+			MatcherMain.setTutorTableFrame(subjectnum,email,fname,lname,subj);
 			parent.setContentPane(MatcherMain.tutortableframe);
 		} else if (event.getSource().equals(logButton)) {
 			

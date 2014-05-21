@@ -92,7 +92,7 @@ public class MainFrame extends JPanel implements ActionListener{
 		c.gridx = 0;
 		c.gridy = y;
 		y += 1;
-		signinPanel.add(new JLabel("Password: "),c);
+		signinPanel.add(new JLabel("Email Address: "),c);
 		
 		c.gridx = 1;
 		signinPanel.add(emailField,c);
@@ -143,18 +143,21 @@ public class MainFrame extends JPanel implements ActionListener{
 				
 				boolean found = false;
 				
+				String subject = "";
 				while (currentLine != null) {
 					currentLine = br.readLine();
 					if (currentLine.contains(fnameField.getText()+","+lnameField.getText()+","+emailField.getText())) {
 						found = true;
+						subject = currentLine.split(",")[4];
 					}
 					
 					if (found) break;
 					currentLine = br.readLine();
 				}
+
 				
 				if (found) {
-					MatcherMain.setOptionsFrame(fnameField.getText(), lnameField.getText()
+					MatcherMain.setOptionsFrame(subject, fnameField.getText(), lnameField.getText()
 							, emailField.getText(), tuteeChoice.isSelected());
 					this.setVisible(false);
 					parent.remove(this);

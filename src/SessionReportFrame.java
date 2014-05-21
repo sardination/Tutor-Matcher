@@ -5,13 +5,19 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
 import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
@@ -37,7 +43,9 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 	JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
 	//*********
 	
-	public SessionReportFrame() {
+	public SessionReportFrame(String tuto, String tute) {
+		this.tutor = tuto;
+		this.tutee = tute;
 		ReportScreen = new JPanel();
 		ReportScreen.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -50,7 +58,9 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		supervisorField = new JTextField(3);
 		notesField = new JTextArea(6,30);
 		saveButton = new JButton("Save");
+		saveButton.addActionListener(this);
 		cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(this);
 		
 		int y = 0;
 		
@@ -119,8 +129,29 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		MatcherMain parent = (MatcherMain) SwingUtilities.getWindowAncestor(this).
+				getComponent(0).getComponentAt(0, 0);
 		if (event.getSource().equals(saveButton)) {
-			
+			Writer output;
+			try {
+				File file = new File(tutor+".csv");
+				String writeInfo = tutee+","+datePicker.getJFormattedTextField().getText()+","+minutesField.getText()+","+
+				supervisorField.getText()+","+notesField.getText()+"\n";
+				output = new BufferedWriter(new FileWriter(file.getName(), true));
+				output.write(writeInfo);
+				output.close();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(ReportScreen, "Sorry, something went wrong!");
+			}
+			this.setVisible(false);
+			this.getParent().remove(this);
+			MatcherMain.setMainFrame();
+			parent.setContentPane(MatcherMain.mainframe);
+		} else if (event.getSource().equals(cancelButton)) {
+			this.setVisible(false);
+			this.getParent().remove(this);
+			MatcherMain.setMainFrame();
+			parent.setContentPane(MatcherMain.mainframe);
 		}
 		
 	}
