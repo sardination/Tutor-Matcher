@@ -34,15 +34,17 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 	private JTextArea notesField;
 	private JButton saveButton;
 	private JButton cancelButton;
-	
-	//JDatePicker... hi.jar from: http://jdatepicker.org/ and implementation code from:
+
+	// JDatePicker... hi.jar from: http://jdatepicker.org/ and implementation
+	// code from:
 	// http://www.codejava.net/java-se/swing/how-to-use-jdatepicker-to-display-calendar-component
-	//********
+	// ********
 	UtilDateModel model = new UtilDateModel();
 	JDatePanelImpl datePanel = new JDatePanelImpl(model);
 	JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
-	//*********
-	
+
+	// *********
+
 	public SessionReportFrame(String tuto, String tute) {
 		this.tutor = tuto;
 		this.tutee = tute;
@@ -53,95 +55,101 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		c.insets = new Insets(15, 0, 0, 15);
 
 		minutesField = new JTextField(3);
-		JPanel minutesFieldWrapper = new JPanel(new FlowLayout(0,0, FlowLayout.LEADING));
+		JPanel minutesFieldWrapper = new JPanel(new FlowLayout(0, 0,
+				FlowLayout.LEADING));
 		minutesFieldWrapper.add(minutesField);
 		supervisorField = new JTextField(3);
-		notesField = new JTextArea(6,30);
+		notesField = new JTextArea(6, 30);
 		saveButton = new JButton("Save");
 		saveButton.addActionListener(this);
 		cancelButton = new JButton("Cancel");
 		cancelButton.addActionListener(this);
-		
+
 		int y = 0;
-		
+
 		c.gridx = 0;
 		c.gridy = y;
 		y += 1;
 		c.gridwidth = 2;
 		Insets oldInsets = c.insets;
 		c.insets = new Insets(10, 0, 15, 0);
-		ReportScreen.add(new JLabel("Create Session Report",SwingConstants.CENTER), c);
-		
+		ReportScreen.add(new JLabel("Create Session Report",
+				SwingConstants.CENTER), c);
+
 		c.gridx = 0;
 		c.gridy = y;
 		y += 1;
-		ReportScreen.add(new JLabel("Tutor: " + tutor + " " +
-				" Tutee: " + tutee, SwingConstants.CENTER), c);
-		
+		ReportScreen.add(new JLabel("Tutor: " + tutor + " " + " Tutee: "
+				+ tutee, SwingConstants.CENTER), c);
+
 		c.insets = oldInsets;
 		c.gridy = y;
 		y += 1;
 		c.gridwidth = 1;
 		ReportScreen.add(new JLabel("Date: "), c);
-		
+
 		c.gridx = 1;
-		ReportScreen.add(datePicker,c);
-		
+		ReportScreen.add(datePicker, c);
+
 		c.gridx = 0;
 		c.gridy = y;
 		y += 1;
 		ReportScreen.add(new JLabel("Time Spent: (Minutes)"), c);
-		
+
 		c.gridx = 1;
 		ReportScreen.add(minutesFieldWrapper, c);
-		
+
 		c.gridx = 0;
 		c.gridy = y;
 		y += 1;
 		ReportScreen.add(new JLabel("Supervisor Email Address: "), c);
-		
+
 		c.gridx = 1;
 		ReportScreen.add(supervisorField, c);
-		
+
 		c.gridx = 0;
 		c.gridy = y;
 		ReportScreen.add(new JLabel("Additional Notes: "), c);
-		
+
 		c.gridx = 1;
 		c.gridheight = 6;
 		y += 6;
 		ReportScreen.add(notesField, c);
-		
+
 		c.gridx = 0;
 		c.gridy = y;
 		c.gridheight = 1;
 		c.gridwidth = 2;
-		c.insets = new Insets(30,0,15,0);
+		c.insets = new Insets(30, 0, 15, 0);
 		JPanel savePanel = new JPanel();
-		savePanel.setLayout(new GridLayout(1,2));
+		savePanel.setLayout(new GridLayout(1, 2));
 		savePanel.add(saveButton);
 		savePanel.add(cancelButton);
 		ReportScreen.add(savePanel, c);
-		
+
 		this.add(ReportScreen);
 	}
-	
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
-		MatcherMain parent = (MatcherMain) SwingUtilities.getWindowAncestor(this).
-				getComponent(0).getComponentAt(0, 0);
+		MatcherMain parent = (MatcherMain) SwingUtilities
+				.getWindowAncestor(this).getComponent(0).getComponentAt(0, 0);
 		if (event.getSource().equals(saveButton)) {
 			Writer output;
 			try {
-				File file = new File(tutor+".csv");
-				String writeInfo = tutee+","+datePicker.getJFormattedTextField().getText()+","+minutesField.getText()+","+
-				supervisorField.getText()+","+notesField.getText()+"\n";
-				output = new BufferedWriter(new FileWriter(file.getName(), true));
+				File file = new File(tutor + ".csv");
+				String writeInfo = tutee + ","
+						+ datePicker.getJFormattedTextField().getText() + ","
+						+ minutesField.getText() + ","
+						+ supervisorField.getText() + ","
+						+ notesField.getText() + "\n";
+				output = new BufferedWriter(
+						new FileWriter(file.getName(), true));
 				output.write(writeInfo);
 				output.close();
 			} catch (Exception e) {
-				JOptionPane.showMessageDialog(ReportScreen, "Sorry, something went wrong!");
+				JOptionPane.showMessageDialog(ReportScreen,
+						"Sorry, something went wrong!");
 			}
 			this.setVisible(false);
 			this.getParent().remove(this);
@@ -153,7 +161,7 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 			MatcherMain.setMainFrame();
 			parent.setContentPane(MatcherMain.mainframe);
 		}
-		
+
 	}
 
 }

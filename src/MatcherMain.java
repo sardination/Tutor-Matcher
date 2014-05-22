@@ -2,7 +2,6 @@ import javax.swing.JApplet;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-
 @SuppressWarnings("serial")
 public class MatcherMain extends JApplet {
 
@@ -13,83 +12,86 @@ public class MatcherMain extends JApplet {
 	public static OptionsFrame optionsframe;
 
 	public void init() {
-        //Implementing the "seaglass" look and feel (from https://code.google.com/p/seaglass/)
+		// Implementing the "seaglass" look and feel (from
+		// https://code.google.com/p/seaglass/)
 		try {
-            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		
-		//Execute a job on the event-dispatching thread; creating this applet's GUI.
-        try {
-            SwingUtilities.invokeAndWait(new Runnable() {
-                public void run() {
-                    createGUI();
-                }
-            });
-        } catch (Exception e) { 
-            System.err.println("createGUI didn't complete successfully");
-        }
-        
+			UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// Execute a job on the event-dispatching thread; creating this applet's
+		// GUI.
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+				public void run() {
+					createGUI();
+				}
+			});
+		} catch (Exception e) {
+			System.err.println("createGUI didn't complete successfully");
+		}
+
 	}
-	
+
 	public static void setSignupFrame(boolean tutee) {
 		signupframe = new SignupFrame(tutee);
 	}
-	
+
 	public static void setEditing(String f, String l, String e) {
 		signupframe.setEditing(f, l, e);
 	}
-	
+
 	public static void setMainFrame() {
 		mainframe = new MainFrame();
 	}
-	
-	public static void setOptionsFrame(String s, String f, String l, String e, boolean tutee) {
+
+	public static void setOptionsFrame(String s, String f, String l, String e,
+			boolean tutee) {
 		optionsframe = new OptionsFrame(s, f, l, e, tutee);
 	}
-	
-	public static void setTutorTableFrame(int subj, String email, String fname, String lname, String subject) {
-		tutortableframe = new TutorTableFrame(subj, email, fname, lname, subject);
+
+	public static void setTutorTableFrame(int subj, String email, String fname,
+			String lname, String subject) {
+		tutortableframe = new TutorTableFrame(subj, email, fname, lname,
+				subject);
 	}
-	
+
 	public static void setSessionReportFrame(String tuto, String tute) {
 		sessionreportframe = new SessionReportFrame(tuto, tute);
 	}
-	
+
 	private void createGUI() {
-		setSize(600,450);
+		setSize(600, 450);
 		mainframe = new MainFrame();
-		mainframe.setBounds(0,0,1000,1000);
+		mainframe.setBounds(0, 0, 1000, 1000);
 		setContentPane(mainframe);
-		
-		/*Tutor Signup*/
+
+		/* Tutor Signup */
 		/*
-		signupframe = new SignupFrame(false);
-		signupframe.setBounds(0,0,1000,1000);
-		setContentPane(signupframe);
+		 * signupframe = new SignupFrame(false);
+		 * signupframe.setBounds(0,0,1000,1000); setContentPane(signupframe);
 		 */
-		
-		/*Tutee Signup*/
+
+		/* Tutee Signup */
 		/*
-		signupframe = new SignupFrame(true);
-		signupframe.setBounds(0,0,1000,1000);
-		setContentPane(signupframe);
+		 * signupframe = new SignupFrame(true);
+		 * signupframe.setBounds(0,0,1000,1000); setContentPane(signupframe);
 		 */
-		
-		/*Session Report*/
+
+		/* Session Report */
 		/*
-		sessionreportframe = new SessionReportFrame();
-		sessionreportframe.setBounds(0,0,1000,1000);
-		setContentPane(sessionreportframe);
+		 * sessionreportframe = new SessionReportFrame();
+		 * sessionreportframe.setBounds(0,0,1000,1000);
+		 * setContentPane(sessionreportframe);
 		 */
-		
-		/*Tutor Table*/
+
+		/* Tutor Table */
 		/*
-		tutortableframe = new TutorTableFrame(0);
-		tutortableframe.setBounds(0,0,1000,1000);
-		setContentPane(tutortableframe);
+		 * tutortableframe = new TutorTableFrame(0);
+		 * tutortableframe.setBounds(0,0,1000,1000);
+		 * setContentPane(tutortableframe);
 		 */
 	}
-	
+
 }
