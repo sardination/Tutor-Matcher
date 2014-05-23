@@ -302,7 +302,7 @@ public class SignupFrame extends JPanel implements ActionListener {
 						String e = emailField.getText().replace("\n", "    ");
 						String d = datesAvailableField.getText().replace("\n",
 								"    ");
-						String n = datesAvailableField.getText().replace("\n",
+						String n = notesField.getText().replace("\n",
 								"    ");
 						writeInfo = f + "," + l + "," + e + "," + subjectNum
 								+ "," + subjectList[subjectNum] + "," + d + ","
@@ -369,8 +369,20 @@ public class SignupFrame extends JPanel implements ActionListener {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			this.setVisible(false);
+			this.getParent().remove(this);
+			String f = fnameField.getText().replace("\n", "    ");
+			String l = lnameField.getText().replace("\n", "    ");
+			String e = emailField.getText().replace("\n", "    ");
+			MatcherMain.setOptionsFrame(subjectList[subjectNum],f,l,e,tutee);
+			parent.setContentPane(MatcherMain.mainframe);
 		}
-		else if (event.getSource().equals(cancelButton)) {
+		else if (event.getSource().equals(cancelButton)&&editing) {
+			this.setVisible(false);
+			this.getParent().remove(this);
+			MatcherMain.setOptionsFrame(existingInfo[4], existingInfo[0], existingInfo[1], existingInfo[2], tutee);
+			parent.setContentPane(MatcherMain.mainframe);
+		} else if (event.getSource().equals(cancelButton)&&!editing) {
 			this.setVisible(false);
 			this.getParent().remove(this);
 			MatcherMain.setMainFrame();

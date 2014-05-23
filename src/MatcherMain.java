@@ -10,6 +10,7 @@ public class MatcherMain extends JApplet {
 	public static SessionReportFrame sessionreportframe;
 	public static TutorTableFrame tutortableframe;
 	public static OptionsFrame optionsframe;
+	public static SessionReportLogFrame logframe;
 
 	public void init() {
 		// Implementing the "seaglass" look and feel (from
@@ -57,8 +58,13 @@ public class MatcherMain extends JApplet {
 				subject);
 	}
 
-	public static void setSessionReportFrame(String tuto, String tute) {
-		sessionreportframe = new SessionReportFrame(tuto, tute);
+	public static void setSessionReportFrame(String tuto, String tute, String email, String subject) {
+		sessionreportframe = new SessionReportFrame(tuto, tute, email, subject);
+	}
+	
+	public static void setLogFrame(int num, String email, String fname, String lname,
+			String subject) {
+		logframe = new SessionReportLogFrame(num, email, fname, lname, subject);
 	}
 
 	private void createGUI() {

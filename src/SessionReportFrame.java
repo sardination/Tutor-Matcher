@@ -19,9 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-import net.sourceforge.jdatepicker.impl.JDatePanelImpl;
-import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
-import net.sourceforge.jdatepicker.impl.UtilDateModel;
+import com.toedter.calendar.JDateChooser;
+
 
 @SuppressWarnings("serial")
 public class SessionReportFrame extends JPanel implements ActionListener {
@@ -34,18 +33,23 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 	private JTextArea notesField;
 	private JButton saveButton;
 	private JButton cancelButton;
-
-	// JDatePicker... hi.jar from: http://jdatepicker.org/ and implementation
-	// code from:
-	// http://www.codejava.net/java-se/swing/how-to-use-jdatepicker-to-display-calendar-component
-	// ********
-	UtilDateModel model = new UtilDateModel();
-	JDatePanelImpl datePanel = new JDatePanelImpl(model);
-	JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
-
-	// *********
-
-	public SessionReportFrame(String tuto, String tute) {
+	private JDateChooser jDateChooser;
+	
+	// passing info
+	private String subject;
+	private String email;
+	
+	public SessionReportFrame(String tuto, String tute, String email, String subject) {
+		this.email = email;
+		this.subject = subject;
+		
+		//***** jDatePicker code from http://toedter.com/jcalendar/
+		jDateChooser = new com.toedter.calendar.JDateChooser();
+		jDateChooser.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+		jDateChooser.setDateFormatString("dd/MM/yyyy");
+		
+		//*******
+		
 		this.tutor = tuto;
 		this.tutee = tute;
 		ReportScreen = new JPanel();
@@ -89,7 +93,7 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 		ReportScreen.add(new JLabel("Date: "), c);
 
 		c.gridx = 1;
-		ReportScreen.add(datePicker, c);
+		ReportScreen.add(jDateChooser, c);
 
 		c.gridx = 0;
 		c.gridy = y;
@@ -139,7 +143,7 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 			try {
 				File file = new File(tutor + ".csv");
 				String writeInfo = tutee + ","
-						+ datePicker.getJFormattedTextField().getText() + ","
+						+ jDateChooser.getDate().toString() + ","
 						+ minutesField.getText() + ","
 						+ supervisorField.getText() + ","
 						+ notesField.getText() + "\n";
@@ -156,10 +160,10 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 			MatcherMain.setMainFrame();
 			parent.setContentPane(MatcherMain.mainframe);
 		} else if (event.getSource().equals(cancelButton)) {
+			MatcherMain.setOptionsFrame(subject, tutor.split(" ")[0], tutor.split(" ")[1], email, true);
 			this.setVisible(false);
-			this.getParent().remove(this);
-			MatcherMain.setMainFrame();
-			parent.setContentPane(MatcherMain.mainframe);
+			parent.remove(this);
+			parent.setContentPane(MatcherMain.optionsframe);
 		}
 
 	}

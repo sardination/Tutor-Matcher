@@ -1,6 +1,7 @@
-import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -23,6 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -40,6 +42,7 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 	private JTextArea infoScreen;
 
 	private JButton selectTutorButton;
+	private JButton backToOptionsButton;
 
 	private String tuteeEmail;
 	private String fname;
@@ -53,10 +56,21 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 		this.fname = fname;
 		this.lname = lname;
 		this.subject = subject;
-		TableScreen = new JPanel();
-		TableScreen.setLayout(new BorderLayout(0, 10));
+		TableScreen = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(15, 0, 0, 15);
+		
+		int y = 0;
+
+		c.gridwidth = 2;
+		c.gridx = 0;
+		c.gridy = y;
+		y += 1;
+		
 		TableScreen.add(new JLabel("Select a row to view more about the tutor",
-				SwingConstants.CENTER), BorderLayout.NORTH);
+				SwingConstants.CENTER),c);
+		
 		infoScreen = new JTextArea(7, 9);
 		infoScreen.setEditable(false);
 		infoScreen.setLineWrap(true);
@@ -66,6 +80,8 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 				"I want this tutor - an email will be sent to the tutor.");
 		selectTutorButton.setEnabled(false);
 		selectTutorButton.addActionListener(this);
+		backToOptionsButton = new JButton("Back To Options Menu");
+		backToOptionsButton.addActionListener(this);
 
 		findTutors();
 
@@ -92,18 +108,29 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 		JScrollPane tablescrollPane = new JScrollPane(table);
 		tablescrollPane.setPreferredSize(new Dimension(400, 200));
 		table.setFillsViewportHeight(true);
-
-		JPanel southPanel = new JPanel(new GridLayout(2, 1, 0, 0));
-		southPanel.add(infoscrollPane);
-		southPanel.add(selectTutorButton);
-
-		TableScreen.add(southPanel, BorderLayout.SOUTH);
-		TableScreen.add(tablescrollPane, BorderLayout.CENTER);
+		
+		
+		c.gridy = y;
+		y++;
+		TableScreen.add(tablescrollPane,c);
+		
+		c.gridy = y;
+		y++;
+		TableScreen.add(infoscrollPane,c);
+		
+		c.gridx = 0;
+		c.gridy = y;
+		c.gridwidth = 1;
+		y++;
+		TableScreen.add(selectTutorButton,c);
+		
+		c.gridx = 1;
+		TableScreen.add(backToOptionsButton,c);
 
 		this.add(TableScreen);
 	}
 
-	public void findTutors() {
+	private void findTutors() {
 		ArrayList<String> fileInfo = new ArrayList<String>();
 		BufferedReader br = null;
 		try {
@@ -162,6 +189,8 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent event) {
+		MatcherMain parent = (MatcherMain) SwingUtilities
+				.getWindowAncestor(this).getComponent(0).getComponentAt(0, 0);
 		if (event.getSource().equals(selectTutorButton)) {
 			String to = tutorInfo[table.getSelectedRow()][2];
 			String from = "simplesolutionsprogrammers@gmail.com";
@@ -210,6 +239,11 @@ public class TutorTableFrame extends JPanel implements ActionListener {
 										+ " shown in the table.");
 			}
 
+		} else if (event.getSource().equals(backToOptionsButton)) {
+			MatcherMain.setOptionsFrame(subject, fname, lname, tuteeEmail, true);
+			this.setVisible(false);
+			parent.remove(this);
+			parent.setContentPane(MatcherMain.optionsframe);
 		}
 
 	}

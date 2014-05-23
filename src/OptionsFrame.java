@@ -118,7 +118,7 @@ public class OptionsFrame extends JPanel implements ActionListener {
 			this.setVisible(false);
 			this.getParent().remove(this);
 			MatcherMain.setSessionReportFrame(this.fname + " " + this.lname,
-					tuteeList[tuteeComboBox.getSelectedIndex()]);
+					tuteeList[tuteeComboBox.getSelectedIndex()], email, subj);
 			parent.setContentPane(MatcherMain.sessionreportframe);
 		} else if (event.getSource().equals(viewTutorsButton)) {
 			this.setVisible(false);
@@ -127,12 +127,15 @@ public class OptionsFrame extends JPanel implements ActionListener {
 					subj);
 			parent.setContentPane(MatcherMain.tutortableframe);
 		} else if (event.getSource().equals(logButton)) {
-
+			this.setVisible(false);
+			this.getParent().remove(this);
+			MatcherMain.setLogFrame(subjectnum, email, fname, lname, subj);
+			parent.setContentPane(MatcherMain.logframe);
 		} else if (event.getSource().equals(logoutButton)) {
 			this.setVisible(false);
 			this.getParent().remove(this);
-			MatcherMain.setOptionsFrame(subj, fname, lname, email, tutee);
-			parent.setContentPane(MatcherMain.optionsframe);
+			MatcherMain.setMainFrame();
+			parent.setContentPane(MatcherMain.mainframe);
 		}
 
 	}

@@ -31,6 +31,7 @@ public class MainFrame extends JPanel implements ActionListener {
 	private JButton registerButton;
 	private JRadioButton tutorChoice;
 	private JRadioButton tuteeChoice;
+	private JRadioButton adminChoice;
 
 	public MainFrame() {
 		mainScreen = new JPanel(new BorderLayout(0, 10));
@@ -51,10 +52,12 @@ public class MainFrame extends JPanel implements ActionListener {
 		tutorChoice = new JRadioButton("Tutor");
 		tutorChoice.setSelected(true);
 		tuteeChoice = new JRadioButton("Tutee");
+		adminChoice = new JRadioButton("Admin");
 
 		ButtonGroup bg = new ButtonGroup();
 		bg.add(tutorChoice);
 		bg.add(tuteeChoice);
+		bg.add(adminChoice);
 
 		int y = 0;
 
@@ -63,9 +66,10 @@ public class MainFrame extends JPanel implements ActionListener {
 		y += 1;
 		signinPanel.add(new JLabel("Are you a tutor or a tutee?: "), c);
 
-		JPanel radioPanel = new JPanel(new GridLayout(1, 2));
+		JPanel radioPanel = new JPanel(new GridLayout(1, 3));
 		radioPanel.add(tutorChoice);
 		radioPanel.add(tuteeChoice);
+		radioPanel.add(adminChoice);
 
 		c.gridx = 1;
 		c.gridheight = 1;
@@ -136,8 +140,10 @@ public class MainFrame extends JPanel implements ActionListener {
 
 				if (tuteeChoice.isSelected()) {
 					br = new BufferedReader(new FileReader("tuteelist.csv"));
-				} else {
+				} else if (tutorChoice.isSelected()) {
 					br = new BufferedReader(new FileReader("tutorlist.csv"));
+				} else if (adminChoice.isSelected()) {
+					//ADMIN
 				}
 
 				boolean found = false;
@@ -166,7 +172,6 @@ public class MainFrame extends JPanel implements ActionListener {
 					parent.remove(this);
 					parent.setContentPane(MatcherMain.optionsframe);
 				} else {
-					System.out.println("hi");
 					JOptionPane.showMessageDialog(mainScreen,
 							"There is no user that matches these credentials.");
 				}
