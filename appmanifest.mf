@@ -1,0 +1,9 @@
+Trusted-Only: true
+
+Class-Path: lib/plugin.jar
+
+Permissions: all-permissions
+
+Codebase: http://doodlygreetings.com/Client_Project
+
+Application-Name: tutormatcher
