@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -49,7 +51,8 @@ public class OptionsFrame extends JPanel implements ActionListener {
 	private JComboBox tuteeComboBox;
 	private JComboBox cancelTuteeComboBox;
 
-	private String[] tuteeList = { "a", "b" };
+	private ArrayList<String> tuteeList = new ArrayList<String>();
+	//find tutee list
 
 	public OptionsFrame(String s, String f, String l, String e, boolean t) {
 		subj = s;
@@ -60,13 +63,6 @@ public class OptionsFrame extends JPanel implements ActionListener {
 		editButton = new JButton("Edit Your Information");
 		editButton.addActionListener(this);
 
-		// Session Report Panel
-		JPanel sessionReportPanel = new JPanel(new GridLayout(1, 2));
-		reportButton = new JButton("Submit Session Report for -->");
-		reportButton.addActionListener(this);
-		tuteeComboBox = new JComboBox(tuteeList);
-		sessionReportPanel.add(reportButton);
-		sessionReportPanel.add(tuteeComboBox);
 
 		viewTutorsButton = new JButton("View Tutors");
 		viewTutorsButton.addActionListener(this);
@@ -77,8 +73,6 @@ public class OptionsFrame extends JPanel implements ActionListener {
 		acceptRequestButton = new JButton("ACCEPT A TUTOR REQUEST");
 		acceptRequestButton.addActionListener(this);
 		cancelPairingButton = new JButton("Cancel a pairing");
-		cancelPairingButton.addActionListener(this);
-		cancelTuteeComboBox = new JComboBox(tuteeList);
 
 		if (tutee) {
 			optionsPanel = new JPanel(new GridLayout(4, 1));
@@ -88,12 +82,38 @@ public class OptionsFrame extends JPanel implements ActionListener {
 			optionsPanel.add(viewTutorsButton);
 			optionsPanel.add(logoutButton);
 		} else {
+			// get tutee list
+			BufferedReader br = null;
+			try {
+				br = new BufferedReader(new FileReader("tutorlist.csv"));
+				String currentLine = br.readLine();
+				while (currentLine != null) {
+					if (currentLine.contains(fname + "," + lname + "," + email)) {
+						tuteeList = new ArrayList<String>(Arrays.asList(currentLine.split(",")[7].substring(1,
+								currentLine.split(",")[7].length() - 1).split(
+								"~")));
+					}
+					break;
+				}
+			} catch (Exception ex) {
+			}
+			
+			// Session Report Panel
+			JPanel sessionReportPanel = new JPanel(new GridLayout(1, 2));
+			reportButton = new JButton("Submit Session Report for -->");
+			reportButton.addActionListener(this);
+			sessionReportPanel.add(reportButton);
+			tuteeComboBox = new JComboBox(tuteeList.toArray());
+			sessionReportPanel.add(tuteeComboBox);
+			cancelPairingButton.addActionListener(this);
+			cancelTuteeComboBox = new JComboBox(tuteeList.toArray());
+			
 			optionsPanel = new JPanel(new GridLayout(7, 1));
 			optionsPanel.add(new JLabel("Welcome Tutor " + fname + " " + lname,
 					SwingConstants.CENTER));
 
 			boolean alreadyRequested = false;
-			BufferedReader br = null;
+			br = null;
 			try {
 				br = new BufferedReader(new FileReader("requests.csv"));
 				String currentLine = br.readLine();
@@ -112,28 +132,13 @@ public class OptionsFrame extends JPanel implements ActionListener {
 			if (alreadyRequested) {
 				optionsPanel.add(acceptRequestButton);
 			}
-
-			// get tutee list
-			try {
-				br = new BufferedReader(new FileReader("tutorlist.csv"));
-				String currentLine = br.readLine();
-				while (currentLine != null) {
-					if (currentLine.contains(fname + "," + lname + "," + email)) {
-						tuteeList = currentLine.split(",")[7].substring(1,
-								currentLine.split(",")[7].length() - 1).split(
-								"~");
-					}
-					break;
-				}
-			} catch (Exception ex) {
-			}
 			
 			JPanel cancelPanel = new JPanel(new GridLayout(1,2));
 			cancelPanel.add(cancelPairingButton);
 			cancelPanel.add(cancelTuteeComboBox);
 
 			optionsPanel.add(editButton);
-			tuteeComboBox = new JComboBox(tuteeList);
+			tuteeComboBox = new JComboBox(tuteeList.toArray());
 			optionsPanel.add(sessionReportPanel);
 			optionsPanel.add(logButton);
 			optionsPanel.add(cancelPanel);
@@ -180,11 +185,12 @@ public class OptionsFrame extends JPanel implements ActionListener {
 			MatcherMain.setSignupFrame(tutee);
 			MatcherMain.setEditing(fname, lname, email);
 			parent.setContentPane(MatcherMain.signupframe);
-		} else if (event.getSource().equals(reportButton)) {
+		} else if (event.getSource().equals(reportButton)&&
+				!tuteeList.get(tuteeComboBox.getSelectedIndex()).equals("")) {
 			this.setVisible(false);
 			this.getParent().remove(this);
 			MatcherMain.setSessionReportFrame(this.fname + " " + this.lname,
-					tuteeList[tuteeComboBox.getSelectedIndex()], email, subj);
+					tuteeList.get(tuteeComboBox.getSelectedIndex()), email, subj);
 			parent.setContentPane(MatcherMain.sessionreportframe);
 		} else if (event.getSource().equals(viewTutorsButton)) {
 			this.setVisible(false);
@@ -212,6 +218,24 @@ public class OptionsFrame extends JPanel implements ActionListener {
 				messageText = reqinfo[0] + " " + reqinfo[1] + " has accepted "
 						+ reqinfo[3] + " " + reqinfo[4]
 						+ "'s request to be tutored in " + reqinfo[6];
+				
+				try {
+					BufferedReader br = new BufferedReader(new FileReader("requests.csv"));
+					String currentLine = "";
+					String writeToFile = "";
+					currentLine = br.readLine();
+					while (currentLine != null) {
+						if (!currentLine.equals(reqinfoString)) {
+							writeToFile += currentLine + "\n";
+						}
+						currentLine = br.readLine();
+					}
+					FileOutputStream File = new FileOutputStream("requests.csv");
+					File.write(writeToFile.getBytes());
+					File.close();
+					br.close();
+				} catch (Exception e) {
+				}
 
 				// add tutee to list of tutees that the tutor has
 				try {
@@ -223,7 +247,6 @@ public class OptionsFrame extends JPanel implements ActionListener {
 						if (currentLine.contains(fname+","+lname+","+email)) {
 							String replacement = "~"+reqinfo[3]+" "+reqinfo[4]+"~"+currentLine.split(",")[7].substring(1);
 							currentLine = currentLine.replace(currentLine.split(",")[7],replacement);
-							break;
 						}
 						writeToFile += currentLine + "\n";
 						currentLine = br.readLine();
@@ -234,7 +257,6 @@ public class OptionsFrame extends JPanel implements ActionListener {
 					br.close();
 				} catch (Exception ex) {
 				}
-
 			} else if (result == JOptionPane.NO_OPTION) {
 				messageText = reqinfo[0] + " " + reqinfo[1]
 						+ " has declined your request to be tutored in "
@@ -293,17 +315,76 @@ public class OptionsFrame extends JPanel implements ActionListener {
 			} catch (Exception e) {
 
 			}
-
-		} else if (event.getSource().equals(cancelPairingButton)) {
+			
+			this.setVisible(false);
+			this.getParent().remove(this);
+			MatcherMain.setOptionsFrame(subj, fname, lname, email, tutee);
+			parent.setContentPane(MatcherMain.optionsframe);
+		} else if (event.getSource().equals(cancelPairingButton)&&
+				!tuteeList.get(cancelTuteeComboBox.getSelectedIndex()).equals("")) {
 			int result = JOptionPane.showConfirmDialog(optionsPanel, 
 					"Are you sure you want to cancel the pairing\nwith "+
-					tuteeList[cancelTuteeComboBox.getSelectedIndex()], null, JOptionPane.YES_NO_OPTION);
+					tuteeList.get(cancelTuteeComboBox.getSelectedIndex()), null, JOptionPane.YES_NO_OPTION);
 			if (result==JOptionPane.YES_OPTION) {
-				reqinfoString.replace(tuteeList[cancelTuteeComboBox.getSelectedIndex()]+"~", "");
+				
+				try {
+					BufferedReader br = new BufferedReader(new FileReader("tutorlist.csv"));
+					String currentLine = "";
+					String writeToFile = "";
+					currentLine = br.readLine();
+					while (currentLine != null) {
+						if (currentLine.contains(fname+","+lname+","+email)) {
+							currentLine = currentLine.replace(tuteeList.get(cancelTuteeComboBox.getSelectedIndex())+"~",
+									"");
+						}
+						writeToFile += currentLine + "\n";
+						currentLine = br.readLine();
+					}
+					FileOutputStream File = new FileOutputStream("tutorlist.csv");
+					File.write(writeToFile.getBytes());
+					File.close();
+					br.close();
+				} catch (Exception ex) {
+				}
+				
+				// Sending confirmation message
+				String to = "suriya.kandaswamy@gmail.com";
+				String from = "simplesolutionsprogrammers@gmail.com";
+				final String username = "simplesolutionsprogrammers";
+				final String password = "ssprogramming";
+				Properties properties = System.getProperties();
+				properties.put("mail.smtp.auth", "true");
+				properties.put("mail.smtp.starttls.enable", "true");
+				properties.put("mail.smtp.host", "smtp.gmail.com");
+				properties.put("mail.smtp.port", "587");
+				Session session = Session.getInstance(properties,
+						new Authenticator() {
+							protected PasswordAuthentication getPasswordAuthentication() {
+								return new PasswordAuthentication(username,
+										password);
+							}
+						});
+				properties.setProperty("mail.user", username);
+				properties.setProperty("mail.password", password);
+
+				try {
+					MimeMessage message = new MimeMessage(session);
+					message.setFrom(new InternetAddress(from));
+					message.addRecipient(Message.RecipientType.TO,
+							new InternetAddress(to));
+					message.setSubject("Tutor Request Reply");
+					message.setText(fname+" "+lname+" has canceled a tutoring pair with tutee "+
+					tuteeList.get(cancelTuteeComboBox.getSelectedIndex()));
+
+					Transport.send(message);
+				} catch (Exception e) {
+
+				}
+				
 				this.setVisible(false);
 				this.getParent().remove(this);
 				MatcherMain.setOptionsFrame(subj, fname, lname, email, tutee);
-				parent.setContentPane(MatcherMain.mainframe);
+				parent.setContentPane(MatcherMain.optionsframe);
 			}
 		}
 

@@ -213,11 +213,15 @@ public class SessionReportLogFrame extends JPanel implements ActionListener {
 					
 					Transport.send(message);
 					
-					FileOutputStream File = new FileOutputStream("tutorlist.csv");
+					FileOutputStream File = new FileOutputStream(fname+" "+lname+".csv");
 					File.write(new String("").getBytes());
 					File.close();
-				} catch (Exception e) {
 					
+					MatcherMain.setLogFrame(num, email, fname, lname, subject);
+					this.setVisible(false);
+					parent.remove(this);
+					parent.setContentPane(MatcherMain.logframe);
+				} catch (Exception e) {
 				}
 			}
 		}

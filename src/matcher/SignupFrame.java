@@ -45,7 +45,7 @@ public class SignupFrame extends JPanel implements ActionListener {
 								// level class they can teach
 	private boolean editing = false;
 	private String[] existingInfo;
-	private String existingInfoString;
+	private String existingInfoString = "";
 
 	private String[] subjectList = { "Algebra 1", "Geometry",
 			"Honors Geometry", "Bridge to Algebra 2", "Algebra 2",
@@ -209,6 +209,7 @@ public class SignupFrame extends JPanel implements ActionListener {
 
 				while (currentLine != null) {
 					if (currentLine.contains(f + "," + l + "," + em)) {
+						existingInfoString = currentLine;
 						existingInfo = currentLine.split(",");
 						break;
 					}
@@ -318,6 +319,8 @@ public class SignupFrame extends JPanel implements ActionListener {
 							} catch (Exception ex) {
 							}
 						}
+						
+						file = new File("tutorlist.csv");
 					}
 
 					output = new BufferedWriter(new FileWriter(file.getName(),
@@ -371,11 +374,31 @@ public class SignupFrame extends JPanel implements ActionListener {
 							"    ");
 					String n = datesAvailableField.getText().replace("\n",
 							"    ");
+					
 					writeToFile = writeToFile.replaceFirst(existingInfoString,f+","+l+","+e+","+subjectNum+","
 							+subjectList[subjectNum]+","+d+","+n+","+existingInfo[7]);
-					FileOutputStream File = new FileOutputStream("tutorlist.csv");
-					File.write(writeToFile.getBytes());
-					File.close();
+					FileOutputStream file = new FileOutputStream("tutorlist.csv");
+					file.write(writeToFile.getBytes());
+					file.close();
+					
+					if (!f.equals(existingInfo[0]) || !l.equals(existingInfo[1])){
+						br = new BufferedReader(new FileReader(existingInfo[0]+" "+existingInfo[1]+".csv"));
+						currentLine = "";
+						writeToFile = "";
+						currentLine = br.readLine();
+						while (currentLine != null) {
+							writeToFile += currentLine + "\n";
+							currentLine = br.readLine();
+						}
+						File fi = new File(f+" "+l+".csv");
+						fi.createNewFile();
+						file = new FileOutputStream(f+" "+l+".csv");
+						file.write(writeToFile.getBytes());
+						file.close();
+						
+						fi = new File(existingInfo[0]+" "+existingInfo[1]+".csv");
+						fi.delete();
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -386,13 +409,13 @@ public class SignupFrame extends JPanel implements ActionListener {
 			String l = lnameField.getText().replace("\n", "    ");
 			String e = emailField.getText().replace("\n", "    ");
 			MatcherMain.setOptionsFrame(subjectList[subjectNum],f,l,e,tutee);
-			parent.setContentPane(MatcherMain.mainframe);
+			parent.setContentPane(MatcherMain.optionsframe);
 		}
 		else if (event.getSource().equals(cancelButton)&&editing) {
 			this.setVisible(false);
 			this.getParent().remove(this);
 			MatcherMain.setOptionsFrame(existingInfo[4], existingInfo[0], existingInfo[1], existingInfo[2], tutee);
-			parent.setContentPane(MatcherMain.mainframe);
+			parent.setContentPane(MatcherMain.optionsframe);
 		} else if (event.getSource().equals(cancelButton)&&!editing) {
 			this.setVisible(false);
 			this.getParent().remove(this);

@@ -156,12 +156,12 @@ public class SessionReportFrame extends JPanel implements ActionListener {
 				JOptionPane.showMessageDialog(ReportScreen,
 						"Sorry, something went wrong!");
 			}
+			MatcherMain.setOptionsFrame(subject, tutor.split(" ")[0], tutor.split(" ")[1], email, false);
 			this.setVisible(false);
-			this.getParent().remove(this);
-			MatcherMain.setMainFrame();
-			parent.setContentPane(MatcherMain.mainframe);
+			parent.remove(this);
+			parent.setContentPane(MatcherMain.optionsframe);
 		} else if (event.getSource().equals(cancelButton)) {
-			MatcherMain.setOptionsFrame(subject, tutor.split(" ")[0], tutor.split(" ")[1], email, true);
+			MatcherMain.setOptionsFrame(subject, tutor.split(" ")[0], tutor.split(" ")[1], email, false);
 			this.setVisible(false);
 			parent.remove(this);
 			parent.setContentPane(MatcherMain.optionsframe);
